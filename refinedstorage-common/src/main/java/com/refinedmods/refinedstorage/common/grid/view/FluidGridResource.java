@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiGraphics;
@@ -40,7 +41,7 @@ public class FluidGridResource extends AbstractGridResource<FluidResource> {
 
     public FluidGridResource(final FluidResource resource,
                              final String name,
-                             final Map<GridResourceAttributeKey, Set<String>> attributes) {
+                             final Map<GridResourceAttributeKey, Supplier<Set<String>>> attributes) {
         super(resource, name, attributes);
         this.id = BuiltInRegistries.FLUID.getId(resource.fluid());
         this.rendering = RefinedStorageClientApi.INSTANCE.getResourceRendering(FluidResource.class);

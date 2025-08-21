@@ -9,19 +9,21 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import org.apiguardian.api.API;
 
 @API(status = API.Status.STABLE, since = "2.0.0-milestone.3.0")
 public abstract class AbstractGridResource<T extends PlatformResourceKey> implements GridResource {
+    private static final Supplier<Set<String>> EMPTY_SET = Collections::emptySet;
     protected final T resource;
     private final String name;
-    private final Map<GridResourceAttributeKey, Set<String>> attributes;
+    private final Map<GridResourceAttributeKey, Supplier<Set<String>>> attributes;
 
     protected AbstractGridResource(final T resource,
                                    final String name,
-                                   final Map<GridResourceAttributeKey, Set<String>> attributes) {
+                                   final Map<GridResourceAttributeKey, Supplier<Set<String>>> attributes) {
         this.resource = resource;
         this.name = name;
         this.attributes = attributes;
@@ -45,7 +47,7 @@ public abstract class AbstractGridResource<T extends PlatformResourceKey> implem
 
     @Override
     public Set<String> getAttribute(final GridResourceAttributeKey key) {
-        return attributes.getOrDefault(key, Collections.emptySet());
+        return attributes.getOrDefault(key, EMPTY_SET).get();
     }
 
     @Override

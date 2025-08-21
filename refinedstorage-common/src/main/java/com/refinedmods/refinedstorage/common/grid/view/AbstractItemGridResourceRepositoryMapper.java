@@ -1,5 +1,6 @@
 package com.refinedmods.refinedstorage.common.grid.view;
 
+import com.google.common.base.Suppliers;
 import com.refinedmods.refinedstorage.api.resource.ResourceKey;
 import com.refinedmods.refinedstorage.api.resource.repository.ResourceRepositoryMapper;
 import com.refinedmods.refinedstorage.common.api.grid.GridResourceAttributeKeys;
@@ -32,16 +33,15 @@ public abstract class AbstractItemGridResourceRepositoryMapper implements Resour
         final String modId = getModId(itemStack);
         final String modName = getModName(modId).orElse("");
         final Set<String> tags = getTags(item);
-        final String tooltip = getTooltip(itemStack);
         return new ItemGridResource(
             itemResource,
             itemStack,
             name,
             Map.of(
-                GridResourceAttributeKeys.MOD_ID, Set.of(modId),
-                GridResourceAttributeKeys.MOD_NAME, Set.of(modName),
-                GridResourceAttributeKeys.TAGS, tags,
-                GridResourceAttributeKeys.TOOLTIP, Set.of(tooltip)
+                GridResourceAttributeKeys.MOD_ID, Suppliers.ofInstance(Set.of(modId)),
+                GridResourceAttributeKeys.MOD_NAME, Suppliers.ofInstance(Set.of(modName)),
+                GridResourceAttributeKeys.TAGS, Suppliers.ofInstance(tags),
+                GridResourceAttributeKeys.TOOLTIP, Suppliers.memoize(() -> Set.of(getTooltip(itemStack)))
             )
         );
     }

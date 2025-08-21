@@ -1,5 +1,6 @@
 package com.refinedmods.refinedstorage.common.grid.view;
 
+import com.google.common.base.Suppliers;
 import com.refinedmods.refinedstorage.api.resource.ResourceKey;
 import com.refinedmods.refinedstorage.api.resource.repository.ResourceRepositoryMapper;
 import com.refinedmods.refinedstorage.common.api.grid.GridResourceAttributeKeys;
@@ -27,10 +28,10 @@ public abstract class AbstractFluidGridResourceRepositoryMapper implements Resou
             fluidResource,
             name,
             Map.of(
-                GridResourceAttributeKeys.MOD_ID, Set.of(modId),
-                GridResourceAttributeKeys.MOD_NAME, Set.of(modName),
-                GridResourceAttributeKeys.TAGS, tags,
-                GridResourceAttributeKeys.TOOLTIP, Set.of(tooltip)
+                GridResourceAttributeKeys.MOD_ID, Suppliers.ofInstance(Set.of(modId)),
+                GridResourceAttributeKeys.MOD_NAME, Suppliers.ofInstance(Set.of(modName)),
+                GridResourceAttributeKeys.TAGS, Suppliers.ofInstance(tags),
+                GridResourceAttributeKeys.TOOLTIP, Suppliers.ofInstance(Set.of(tooltip))
             )
         );
     }
