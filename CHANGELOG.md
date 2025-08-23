@@ -10,6 +10,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 -   Reduce lag spikes when opening a Grid with many item types. 
+-   Optimize autocrafting calculation performance.
 
 ### Added
 
