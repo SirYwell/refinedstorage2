@@ -136,7 +136,6 @@ class CraftingTree<T> {
             return calculateChild(ingredientState, remaining, childPatterns, resourceState, cancellationToken);
         }
         return ingredientState.cycle()
-            .map(craftingState::getResource)
             .orElseGet(() -> {
                 listener.ingredientsExhausted(resourceState.resource(), remaining);
                 return null;
@@ -192,7 +191,7 @@ class CraftingTree<T> {
     @Nullable
     private CraftingState.ResourceState cycleToNextIngredientOrFail(final IngredientState ingredientState,
                                                                     final ChildCalculationResult<T> childResult) {
-        return ingredientState.cycle().map(craftingState::getResource).orElseGet(() -> {
+        return ingredientState.cycle().orElseGet(() -> {
             this.craftingState = childResult.childTree.craftingState;
             listener.childCalculationCompleted(childResult.childTree.listener);
             return null;
