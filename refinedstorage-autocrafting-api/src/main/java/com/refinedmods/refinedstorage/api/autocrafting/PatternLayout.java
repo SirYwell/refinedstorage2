@@ -2,8 +2,11 @@ package com.refinedmods.refinedstorage.api.autocrafting;
 
 import com.refinedmods.refinedstorage.api.core.CoreValidations;
 import com.refinedmods.refinedstorage.api.resource.ResourceAmount;
+import com.refinedmods.refinedstorage.api.resource.ResourceKey;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apiguardian.api.API;
 
@@ -31,7 +34,7 @@ public record PatternLayout(List<Ingredient> ingredients,
         if (type == PatternType.EXTERNAL && !byproducts.isEmpty()) {
             throw new IllegalArgumentException("External patterns cannot have byproducts");
         }
-        this.ingredients = List.copyOf(ingredients);
+        this.ingredients = List.copyOf(mergeByInputs(ingredients));
         this.outputs = List.copyOf(outputs);
         this.byproducts = List.copyOf(byproducts);
         this.type = type;
@@ -45,5 +48,15 @@ public record PatternLayout(List<Ingredient> ingredients,
                                          final List<ResourceAmount> outputs,
                                          final List<ResourceAmount> byproducts) {
         return new PatternLayout(ingredients, outputs, byproducts, PatternType.INTERNAL);
+    }
+
+    private static List<Ingredient> mergeByInputs(final List<Ingredient> ingredients) {
+        Map<List<ResourceKey>, Long> amounts = new LinkedHashMap<>();
+        for (Ingredient in : ingredients) {
+            amounts.compute(in.inputs(), (k, v) -> v == null ? in.amount() : v + in.amount());
+        }
+        return amounts.entrySet().stream()
+            .map(entry -> new Ingredient(entry.getValue(), entry.getKey()))
+            .toList();
     }
 }
